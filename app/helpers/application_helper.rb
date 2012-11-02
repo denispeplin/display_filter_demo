@@ -1,24 +1,15 @@
-module SimpleForm
-  class FormBuilder < ActionView::Helpers::FormBuilder
-    # tried to monkey patch without copy'n'pasting, broke associations
-    def input(attribute_name, options={}, &block)
-      options = @defaults.deep_dup.deep_merge(options) if @defaults
+# A specific form builder to deal with filtering attributes out based on parameters
+class StrongParametersFormBuilder < SimpleForm::FormBuilder
+  def input(attribute_name, options = {}, &block)
+    display_only = options[:display_only]
 
-      chosen =
-        if name = options[:wrapper]
-          name.respond_to?(:render) ? name : SimpleForm.wrapper(name)
-        else
-          wrapper
-        end
-
-      # here display_filter logic begins
-      display_filter = options.delete(:display_only)
-
-      if (! display_filter) || (display_filter && display_filter.include?(attribute_name))
-        chosen.render find_input(attribute_name, options, &block)
-      end
-    end
+    super unless display_filter && display_filter.include?(attribute_name)
   end
+end
+
+# Form Helper to be used
+def strong_parameters_form_for(object, options = {}, &block)
+  simple_form_for(object, options.merge(:builder => StrongParametersFormBuilder)), &block)
 end
 
 module ApplicationHelper
