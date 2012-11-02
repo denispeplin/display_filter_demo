@@ -1,4 +1,4 @@
-<%= simple_form_for(@topic, defaults: { display_only: [:name] } ) do |f| %>
+<%= strong_parameters_form_for(@topic, defaults: { display_only: [:name] } ) do |f| %>
   <%= f.error_notification %>
 
   <div class="form-inputs">
