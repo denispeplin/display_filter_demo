@@ -13,7 +13,7 @@ end
 
 module ApplicationHelper
   # Form Helper to be used
-  def strong_parameters_form_for(object, options = {}, &block)
+  def filtered_form_for(object, options = {}, &block)
     simple_form_for(object, options.merge(:builder => StrongParametersFormBuilder), &block)
   end
 end
